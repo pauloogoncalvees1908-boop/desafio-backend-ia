@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+pytest
+httpx
+langchain
+langchain-openai
+sentence-transformers
+faiss-cpu
+numpy
