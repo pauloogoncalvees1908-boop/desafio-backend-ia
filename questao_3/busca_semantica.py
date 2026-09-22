@@ -16,7 +16,7 @@ class SistemaBuscaSemantica:
         self.encoder = SentenceTransformer(model_name)
         self.dimension = self.encoder.get_sentence_embedding_dimension()
         
-        # Inicializa o índice FAISS com produto escalar (usado para similaridade de cosseno com vetores normalizados)
+       
         self.index = faiss.IndexFlatIP(self.dimension)
         self.documentos: List[Dict[str, Any]] = []
 
@@ -29,13 +29,12 @@ class SistemaBuscaSemantica:
         self.documentos.extend(docs)
         textos = [doc["conteudo"] for doc in docs]
 
-        # 1. Geração dos embeddings
         embeddings = self.encoder.encode(textos, convert_to_numpy=True, show_progress_bar=False)
 
-        # 2. Normalização L2 para calcular similaridade de cosseno via produto escalar
+
         faiss.normalize_L2(embeddings)
 
-        # 3. Adiciona os vetores ao índice FAISS
+
         self.index.add(embeddings.astype(np.float32))
         print(f"{len(docs)} documentos indexados com sucesso na Vector Store!")
 
@@ -44,11 +43,11 @@ class SistemaBuscaSemantica:
         Realiza a busca semântica para uma determinada consulta.
         Retorna os 'top_k' documentos mais similares e seus respectivos scores.
         """
-        # 1. Gera e normaliza o embedding da consulta
+
         query_embedding = self.encoder.encode([query], convert_to_numpy=True)
         faiss.normalize_L2(query_embedding)
 
-        # 2. Busca no índice FAISS pelos vetores mais próximos
+
         scores, indices = self.index.search(query_embedding.astype(np.float32), top_k)
 
         resultados = []
@@ -62,11 +61,9 @@ class SistemaBuscaSemantica:
         return resultados
 
 
-# -----------------------------------------------------------------------------
-# Demonstração Prática de Busca Semântica
-# -----------------------------------------------------------------------------
+
 if __name__ == "__main__":
-    # Base de conhecimento fictícia (artigos de tecnologia/desenvolvimento)
+
     base_conhecimento = [
         {
             "id": 1,
@@ -90,11 +87,11 @@ if __name__ == "__main__":
         }
     ]
 
-    # Instancia e popula a vector store
+
     busca_engine = SistemaBuscaSemantica()
     busca_engine.adicionar_documentos(base_conhecimento)
 
-    # Testes com buscas semânticas (usando sinônimos/termos que não estão exatamente no texto)
+
     consultas_teste = [
         "Como criar APIs rápidas em Python?",
         "Ferramentas para armazenar vetores de IA"

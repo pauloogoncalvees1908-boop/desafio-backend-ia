@@ -9,7 +9,6 @@ class ChatbotPython:
     """Chatbot especializado em responder dúvidas sobre programação Python."""
 
     def __init__(self, model_name: str = "gpt-4o"):
-        # Certifique-se de que a variável de ambiente OPENAI_API_KEY esteja definida
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             raise ValueError(
@@ -20,11 +19,11 @@ class ChatbotPython:
         # Inicializa o modelo da OpenAI através do LangChain
         self.llm = ChatOpenAI(
             model=model_name,
-            temperature=0.2,  # Baixa temperatura para respostas mais precisas e objetivas
+            temperature=0.2,  
             api_key=api_key
         )
 
-        # Define o Prompt Template com papel de especialista em Python
+       
         self.prompt_template = ChatPromptTemplate.from_messages([
             ("system", (
                 "Você é um tutor especialista em programação Python. "
@@ -43,11 +42,9 @@ class ChatbotPython:
         return self.chain.invoke({"pergunta": pergunta})
 
 
-# -----------------------------------------------------------------------------
-# Demonstração de Uso
-# -----------------------------------------------------------------------------
+
 if __name__ == "__main__":
-    # Exemplo prático de execução
+   
     try:
         chatbot = ChatbotPython()
 
